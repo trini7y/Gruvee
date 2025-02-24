@@ -120,7 +120,7 @@ describe('MemberService', () => {
   describe('remove', () => {
     it('should remove a member from an event', async () => {
       const result = await service.remove(mockEvent.id, 1);
-      expect(result).toEqual({ message: 'Member deleted successfully' });
+      expect(result).toEqual({ message: 'Member removed successfully' });
       expect(memberRepository.remove).toHaveBeenCalledWith(mockMembers[0]);
     });
 

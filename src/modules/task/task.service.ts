@@ -57,13 +57,21 @@ export class TaskService {
     updateTaskDto: UpdateTaskDto,
   ): Promise<Task> {
     const task = await this.findOne(eventId, taskId);
-    if (updateTaskDto.assigned_to) {
-      task.assigned_to = await this.memberRepository.findBy({
-        id: In(updateTaskDto.assigned_to),
-      });
+    if (!task) {
+      throw new NotFoundException('Task not found');
     }
-    Object.assign(task, updateTaskDto);
-    return await this.taskRepository.save(task);
+
+    const assignedMembers = await this.memberRepository.findBy({
+      id: In(updateTaskDto.assigned_to),
+    });
+
+    const updatedTask = {
+      ...task,
+      ...updateTaskDto,
+      assigned_to: assignedMembers,
+    };
+
+    return this.taskRepository.save(updatedTask);
   }
 
   async remove(eventId: string, taskId: string): Promise<{ message: string }> {
