@@ -13,46 +13,42 @@ import { CreateMemberDto, UpdateMemberDto } from '../../libs/dto/member.dto';
 import { AuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { Member } from '../../libs/entities/member.entity';
 
-@Controller('events/:eventId/members')
+@Controller('/members')
 @UseGuards(AuthGuard)
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
   @Post()
   async create(
-    @Param('eventId') eventId: string,
     @Body() createMemberDto: CreateMemberDto,
   ): Promise<Member> {
-    return this.memberService.create(eventId, createMemberDto);
+    return this.memberService.create(createMemberDto);
   }
 
-  @Get()
-  async findAll(@Param('eventId') eventId: string): Promise<Member[]> {
-    return this.memberService.findAll(eventId);
-  }
+  // @Get()
+  // async findAll(@Param('eventId') email: string): Promise<Member[]> {
+  //   return this.memberService.findAll(email);
+  // }
 
   @Get(':memberId')
   async findOne(
-    @Param('eventId') eventId: string,
-    @Param('memberId') memberId: number,
+    @Param('memberEmail') email: string,
   ): Promise<Member> {
-    return this.memberService.findOne(eventId, memberId);
+    return this.memberService.findOne(email);
   }
 
   @Put(':memberId')
   async update(
-    @Param('eventId') eventId: string,
-    @Param('memberId') memberId: number,
+    @Param('memberId') email: string,
     @Body() updateMemberDto: UpdateMemberDto,
   ): Promise<Member> {
-    return this.memberService.update(eventId, memberId, updateMemberDto);
+    return this.memberService.update(email, updateMemberDto);
   }
 
   @Delete(':memberId')
   async remove(
-    @Param('eventId') eventId: string,
-    @Param('memberId') memberId: number,
+    @Param('memberId') email: string,
   ): Promise<{ message: string }> {
-    return this.memberService.remove(eventId, memberId);
+    return this.memberService.remove(email);
   }
 }

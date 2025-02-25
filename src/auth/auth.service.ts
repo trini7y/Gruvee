@@ -4,6 +4,7 @@ import { LoginDto } from '../libs/dto/login.dto';
 import { RegistrationDto } from '../libs/dto/registration.dto';
 import { UserService } from '../modules/users/users.service';
 import * as bcrypt from 'bcrypt';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -66,14 +67,13 @@ export class AuthService {
   }
   
 
-  async register(payload: RegistrationDto) {
+  async register(payload: RegistrationDto, req: Request) {
     const jwtPayload = {
       email: payload.email,
       firstName: payload.firstName,
       lastName: payload.lastName
     };
     
-    const accessToken = this.jwtService.sign(jwtPayload);
-    return this.userService.createUser(payload, accessToken);
+    return this.userService.createUser(payload, req);
   }
 }

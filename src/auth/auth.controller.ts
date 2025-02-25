@@ -3,11 +3,13 @@ import {
   Controller,
   Post,
   HttpException,
+  Req,
 } from '@nestjs/common';
 import { RegistrationDto } from '../libs/dto/registration.dto';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
 import { LoginDto } from '../libs/dto/login.dto';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +25,7 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  register(@Body() payload: RegistrationDto) {
-    return this.authService.register(payload);
+  register(@Body() payload: RegistrationDto, @Req() req: Request) {
+    return this.authService.register(payload, req);
   }
 }

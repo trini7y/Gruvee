@@ -11,7 +11,4 @@ export class Member {
 
   @Column({ unique: true })
   email: string;
-
-  @ManyToOne(() => Event, (event) => event.members, { onDelete: 'CASCADE' })
-  event: Event;
 }

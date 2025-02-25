@@ -8,6 +8,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { AuthMiddleware } from './auth.middleware';
+import { UserService } from 'src/modules/users/users.service';
 
 
 @Module({

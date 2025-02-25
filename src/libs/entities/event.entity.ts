@@ -25,7 +25,4 @@ export class Event {
 
   @OneToMany(() => Task, (task) => task.event)
   tasks: Task[];
-
-  @OneToMany(() => Member, (member) => member.event, { cascade: true })
-  members: Member[];
 }

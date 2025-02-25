@@ -1,9 +1,10 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../../libs/entities/users.entity';
 import { RegistrationDto } from '../../libs/dto/registration.dto';
+import { Request } from 'express';
 
 @Injectable()
 export class UserService {
@@ -14,7 +15,7 @@ export class UserService {
   ) {}
   
   private readonly log = new Logger(UserService.name);
-  async createUser(payload: RegistrationDto, accessToken: string): Promise<object> {
+  async createUser(payload: RegistrationDto, req: Request): Promise<object> {
     let response: object;
     try {
       if (!payload) {
@@ -24,6 +25,17 @@ export class UserService {
           statusCode: 400 
         };
       }
+
+      const authHeader = req.headers['authorization'];
+      if (!authHeader) {
+        throw new BadRequestException('No authorization header provided');
+      }
+
+      const [type, accessToken] = authHeader.split(' ');
+      if (type !== 'Bearer' || !accessToken) {
+        throw new BadRequestException('Invalid authorization header format');
+      }
+
       const checkEmail = await this.isEmailTaken(payload.email);
 
       if (checkEmail) {
